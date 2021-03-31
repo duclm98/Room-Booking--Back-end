@@ -1,45 +1,24 @@
 package models
 
 import (
-	"fmt"
-
-	"gorm.io/gorm"
-	
 	"echo-demo/db"
 )
 
-type Transport struct {
-	Bus []string
-	Oto []string
-}
-
-type Coordinates struct {
-	Longitude string
-	Latitude string
-}
-
-type Building struct {
-	gorm.Model
-	Name string
-	Description string
-	OpeningDay string
-	OpeningHour string
-	Address string
-	Phone string
-	Transport Transport
-	Coordinates Coordinates
-	Image string
-	Note string
-	Equipment string
-}
-
-func GetBuildings() {
+func GetBuildings() (buildings []Building, err error) {
 	db, err := db.Connect()
-	if err != nil {
-		fmt.Println("Error:", err)
-		return
+	if err == nil {
+		db.Table("buildings").Find(&buildings)
 	}
-	var building []Building
-	db.Table("buildings").Find(&building)
-	fmt.Println(building)
+	return buildings, err
+}
+
+func GetBuildings2() (buildings []Building, err error) {
+	db, err := db.Connect()
+	if err == nil {
+		err = db.Table("buildings").Find(&buildings).Error
+		for i := range buildings {
+			db.Table("rooms").Where("buildingid = ?", buildings[i].ID).Find(&buildings[i].Rooms)
+		}
+	}
+	return buildings, err
 }

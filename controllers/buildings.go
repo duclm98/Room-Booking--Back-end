@@ -10,8 +10,12 @@ import (
 )
 
 func GetBuildings(c echo.Context) error {
-	models.GetRoomsByBuildingId(5)
-	return c.String(http.StatusOK, "Buildings...")
+	building, err := models.GetBuildings2()
+	if(err != nil) {
+		return c.JSON(http.StatusBadRequest, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, building)
 }
 
 func GetRoomsByBuildingId(c echo.Context) error {
@@ -19,9 +23,11 @@ func GetRoomsByBuildingId(c echo.Context) error {
 	if(errParseUint != nil) {
 		return c.JSON(http.StatusBadRequest, errParseUint.Error())
 	}
+
 	rooms, err := models.GetRoomsByBuildingId(id)
 	if(err != nil) {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
+
 	return c.JSON(http.StatusOK, rooms)
 }

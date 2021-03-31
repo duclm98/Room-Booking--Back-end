@@ -9,6 +9,7 @@ require (
 	golang.org/x/net v0.0.0-20210329181859-df645c7b52b1
 	golang.org/x/sys v0.0.0-20210326220804-49726bf1d181 // indirect
 	golang.org/x/text v0.3.5 // indirect
+	gorm.io/datatypes v1.0.0
 	gorm.io/driver/postgres v1.0.8
 	gorm.io/gorm v1.21.6
 )
