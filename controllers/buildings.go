@@ -10,7 +10,7 @@ import (
 )
 
 func GetBuildings(c echo.Context) error {
-	building, err := models.GetBuildings2()
+	building, err := models.GetBuildings()
 	if(err != nil) {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}

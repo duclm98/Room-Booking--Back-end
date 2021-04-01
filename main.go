@@ -14,7 +14,7 @@ func main() {
 	e := echo.New()
 
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-		Format: "method=${method}, uri=${uri}, status=${status}\n",
+		Format: "method=${method}, status=${status}, uri=${uri}\n",
 	}))
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
@@ -23,6 +23,7 @@ func main() {
 
 	api := e.Group("/api")
 	routes.BuildingsRoute(api)
+	routes.BookingRoute(api)
 	
 	s := &http2.Server{
 		MaxConcurrentStreams: 250,

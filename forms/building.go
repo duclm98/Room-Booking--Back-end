@@ -1,4 +1,4 @@
-package models
+package forms
 
 import (
 	"gorm.io/gorm"
@@ -18,14 +18,5 @@ type Building struct {
 	Image string
 	Note string
 	Equipment string
-	Rooms []Room
-}
-
-type Room struct {
-	gorm.Model
-	Name           string
-	Description    string
-	NumberOfPeople uint
-	Area           uint
-	BuildingID 		 uint
+	Rooms datatypes.JSON
 }

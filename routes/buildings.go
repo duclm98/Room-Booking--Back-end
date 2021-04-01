@@ -6,7 +6,7 @@ import (
 )
 
 func BuildingsRoute(e *echo.Group) {
-	buildings := e.Group("/buildings")
-	buildings.GET("", controllers.GetBuildings)
-	buildings.GET("/:id/rooms", controllers.GetRoomsByBuildingId)
+	router := e.Group("/buildings")
+	router.GET("", controllers.GetBuildings)
+	router.GET("/:id/rooms", controllers.GetRoomsByBuildingId)
 }
