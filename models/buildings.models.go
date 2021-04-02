@@ -1,18 +1,17 @@
 package models
 
 import (
-
 	"gorm.io/gorm"
 
-	form "echo-demo/forms"
 	database "echo-demo/db"
+	form "echo-demo/forms"
 )
 
 func GetBuildings() (buildings []form.Building, err error) {
 	var db *gorm.DB
 	db, err = database.Connect()
 	if err == nil {
-		err = db.Table("buildings").Find(&buildings).Error
+		err = db.Model(&buildings).Find(&buildings).Error
 	}
 	return buildings, err
 }
@@ -28,8 +27,14 @@ func GetBuildings2() (buildings []form.Building, err error) {
 		// 	}
 		// }
 		err = db.Raw(`select *,
-				array_to_json(array(select row_to_json(rooms) from rooms where building_id = buildings.id)) as rooms
-				from buildings`).Scan(&buildings).Error
+									array_to_json(array(select json_build_object('ID', id, 'CreatedAt',created_at,
+																							'UpdatedAt', updated_at, 'DeletedAt', deleted_at,
+																							'Name', name, 'Description', description,
+																							'NumberOfPeople', number_of_people,
+																							'Area', area, 'BuildingID', building_id)
+																			from rooms where building_id = 1))
+										as rooms
+									from buildings`).Scan(&buildings).Error
 	}
 	return buildings, err
 }

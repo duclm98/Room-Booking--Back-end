@@ -2,15 +2,15 @@ package controllers
 
 import (
 	"net/http"
-	"strconv"
-
 	"github.com/labstack/echo/v4"
 
+	form "echo-demo/forms"
 	"echo-demo/models"
 )
 
 func GetBuildings(c echo.Context) error {
 	building, err := models.GetBuildings()
+	// building, err := models.GetBuildings2()
 	if(err != nil) {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
@@ -19,15 +19,51 @@ func GetBuildings(c echo.Context) error {
 }
 
 func GetRoomsByBuildingId(c echo.Context) error {
-	id, errParseUint := strconv.ParseUint(c.Param("id"), 10, 64)
-	if(errParseUint != nil) {
-		return c.JSON(http.StatusBadRequest, errParseUint.Error())
+	r := new(form.Room)
+	if err := c.Bind(r); err != nil {
+		return c.JSON(http.StatusBadRequest, err)
 	}
 
-	rooms, err := models.GetRoomsByBuildingId(id)
+	rooms, err := models.GetRoomsByBuildingId(r.BuildingID)
 	if(err != nil) {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 
 	return c.JSON(http.StatusOK, rooms)
+}
+
+func GetAvailableRooms(c echo.Context) error {
+	b := new(form.Booking)
+	if err := c.Bind(b); err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+
+	bookingArr, err := models.GetBookingByBuildingIdDateTime(b.BuildingID, b.Date, b.Time)
+	if(err != nil) {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+
+	roomsArr, err := models.GetRoomsByBuildingId(b.BuildingID)
+	if(err != nil) {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+
+	var result []form.Room
+
+	for i := range roomsArr {
+		if a := contains(bookingArr, roomsArr[i].ID); a == false {
+			result = append(result, roomsArr[i])
+		}
+	}
+
+	return c.JSON(http.StatusOK, result)
+}
+
+func contains(arr []form.Booking, id uint) bool {
+	for i := range arr {
+		if arr[i].RoomID == id {
+			return true
+		}
+	}
+	return false
 }

@@ -9,5 +9,6 @@ import (
 func BuildingsRoute(e *echo.Group) {
 	router := e.Group("/buildings")
 	router.GET("", controllers.GetBuildings)
-	router.GET("/:id/rooms", controllers.GetRoomsByBuildingId)
+	router.GET("/:BuildingID/rooms", controllers.GetRoomsByBuildingId)
+	router.GET("/:BuildingID/available-rooms", controllers.GetAvailableRooms)
 }

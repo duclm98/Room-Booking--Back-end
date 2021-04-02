@@ -8,7 +8,7 @@ import (
 	database "echo-demo/db"
 )
 
-func GetRoomsByBuildingId(id uint64) (rooms []form.Room, err error) {
+func GetRoomsByBuildingId(id uint) (rooms []form.Room, err error) {
 	var db *gorm.DB
 	db, err = database.Connect()
 	if err == nil {

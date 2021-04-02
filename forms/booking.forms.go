@@ -11,8 +11,8 @@ type Booking struct {
   CreatedAt time.Time
   UpdatedAt time.Time
   DeletedAt gorm.DeletedAt `gorm:"index"`
-	BuildingID uint `param:"BuildingID" query:"BuildingID" json:"BuildingID"`
-	RoomID uint `param:"RoomID" query:"RoomID" json:"RoomID"`
 	Date string `param:"Date" query:"Date" json:"Date"`
 	Time string `param:"Time" query:"Time" json:"Time"`
+	BuildingID uint `param:"BuildingID" query:"BuildingID" json:"BuildingID"`
+	RoomID uint `param:"RoomID" query:"RoomID" json:"RoomID"`
 }
