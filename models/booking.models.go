@@ -4,8 +4,8 @@ import (
 
 	"gorm.io/gorm"
 
-	database "echo-demo/db"
 	form "echo-demo/forms"
+	database "echo-demo/db"
 )
 
 func GetBookingByBuildingIdDateTime(buildingID uint, date string, time string) (bookingArr []form.Booking, err error) {

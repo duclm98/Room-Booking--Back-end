@@ -4,8 +4,8 @@ import (
 
 	"gorm.io/gorm"
 
-	database "echo-demo/db"
 	form "echo-demo/forms"
+	database "echo-demo/db"
 )
 
 func GetRoomsByBuildingId(id uint64) (rooms []form.Room, err error) {

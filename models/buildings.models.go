@@ -4,8 +4,8 @@ import (
 
 	"gorm.io/gorm"
 
-	database "echo-demo/db"
 	form "echo-demo/forms"
+	database "echo-demo/db"
 )
 
 func GetBuildings() (buildings []form.Building, err error) {

@@ -5,6 +5,12 @@ import (
 	"gorm.io/datatypes"
 )
 
+type Coordinates struct {
+	Longitude string
+	Latitude string
+	BuildingID uint
+}
+
 type Building struct {
 	gorm.Model
 	Name string
