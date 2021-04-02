@@ -7,16 +7,18 @@ import (
 	form "echo-demo/forms"
 )
 
-func GetBuildings() (buildings []form.Building, err error) {
+func GetBuildingsList() (buildings []form.Building, err error) {
 	var db *gorm.DB
+
 	db, err = database.Connect()
 	if err == nil {
+		db.AutoMigrate(&form.Building{})
 		err = db.Model(&buildings).Find(&buildings).Error
 	}
 	return buildings, err
 }
 
-func GetBuildings2() (buildings []form.Building, err error) {
+func GetBuildingsList2() (buildings []form.Building, err error) {
 	var db *gorm.DB
 	db, err = database.Connect()
 	if err == nil {
@@ -37,4 +39,15 @@ func GetBuildings2() (buildings []form.Building, err error) {
 									from buildings`).Scan(&buildings).Error
 	}
 	return buildings, err
+}
+
+func GetBuilding(id uint) (building form.Building, err error) {
+	var db *gorm.DB
+
+	db, err = database.Connect()
+	if err == nil {
+		db.AutoMigrate(&form.Building{})
+		err = db.Model(&building).First(&building, id).Error
+	}
+	return building, err
 }
