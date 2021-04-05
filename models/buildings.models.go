@@ -29,11 +29,11 @@ func GetBuildingsList2() (buildings []form.Building, err error) {
 		// 	}
 		// }
 		err = db.Raw(`select *,
-									array_to_json(array(select json_build_object('ID', id, 'CreatedAt',created_at,
-																							'UpdatedAt', updated_at, 'DeletedAt', deleted_at,
-																							'Name', name, 'Description', description,
-																							'NumberOfPeople', number_of_people,
-																							'Area', area, 'BuildingID', building_id)
+									array_to_json(array(select json_build_object('id', id, 'createdAt',created_at,
+																							'updatedAt', updated_at, 'deletedAt', deleted_at,
+																							'name', name, 'description', description,
+																							'numberOfPeople', number_of_people,
+																							'area', area, 'buildingId', building_id)
 																			from rooms where building_id = 1))
 										as rooms
 									from buildings`).Scan(&buildings).Error

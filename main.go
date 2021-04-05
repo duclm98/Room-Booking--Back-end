@@ -24,6 +24,7 @@ func main() {
 	api := e.Group("/api")
 	routes.BuildingsRoute(api)
 	routes.BookingRoute(api)
+	routes.AuthRoute(api)
 	
 	s := &http2.Server{
 		MaxConcurrentStreams: 250,
