@@ -17,6 +17,16 @@ func CreateUser(user form.User) (form.User, error) {
 	return user, err
 }
 
+func UpdateUser(user form.User) (form.User, error) {
+	var db *gorm.DB
+	var err error
+	db, err = database.Connect()
+	if err == nil {
+		err = db.Save(&user).Error
+	}
+	return user, err
+}
+
 func GetUserByUsername(username string) (user form.User, err error) {
 	var db *gorm.DB
 	db, err = database.Connect()

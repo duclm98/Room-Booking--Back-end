@@ -1,16 +1,34 @@
 package routes
 
 import (
+	"net/http"
+
 	"github.com/labstack/echo/v4"
-	
-	"echo-demo/controllers"
+
+	controller "echo-demo/controllers"
+	myMiddleware "echo-demo/middlewares"
 )
+
+func IsAuth(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		isAuth := myMiddleware.Verify(c.Request())
+		if isAuth == false {
+			return c.JSON(http.StatusUnauthorized, map[string]string{
+				"message": "Chưa đăng nhập vào hệ thống!",
+			})
+		}
+		return next(c)
+	}
+}
+
+
+var isAuth = myMiddleware.IsAuth
 
 func BuildingsRoute(e *echo.Group) {
 	router := e.Group("/buildings")
-	router.GET("", controllers.GetBuildingsList)
-	router.GET("/:ID", controllers.GetBuilding)
-	router.GET("/:BuildingID/rooms", controllers.GetRoomsByBuildingId)
-	router.GET("/:BuildingID/available-rooms-list", controllers.GetAvailableRoomsList)
-	// router.GET("/:BuildingID/available-rooms-calendar", controllers.GetAvailableRoomsCalendar)
+	router.GET("", controller.GetBuildingsList, IsAuth)
+	router.GET("/:ID", controller.GetBuilding)
+	router.GET("/:BuildingID/rooms", controller.GetRoomsByBuildingId)
+	router.GET("/:BuildingID/available-rooms-list", controller.GetAvailableRoomsList)
+	// router.GET("/:BuildingID/available-rooms-calendar", controller.GetAvailableRoomsCalendar)
 }

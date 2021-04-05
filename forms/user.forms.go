@@ -12,4 +12,5 @@ type User struct {
   DeletedAt 		 gorm.DeletedAt `gorm:"index" param:"deletedAt" query:"deletedAt" json:"deletedAt"`
 	Username       string 				`param:"username" query:"username" json:"username"`
 	Password       string  				`param:"password" query:"password" json:"password"`
+	RefreshToken   string  				`param:"refreshToken" query:"refreshToken" json:"refreshToken"`
 }
