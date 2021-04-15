@@ -23,11 +23,11 @@ func CheckPassword(hashedPassword string, password string) (isPasswordValid bool
 	return true
 }
 
-func CreateToken(userId uint, secretKey string, exprise uint) (string, error) {
+func CreateToken(id uint, secretKey string, exprise uint) (string, error) {
   var err error
 	token := jwt.New(jwt.SigningMethodHS256)
   claims := token.Claims.(jwt.MapClaims)
-  claims["id"] = userId
+  claims["id"] = id
   claims["exp"] = time.Now().Add(time.Minute * time.Duration(exprise)).Unix()
   t, err := token.SignedString([]byte(secretKey))
   return t, err

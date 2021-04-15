@@ -27,6 +27,15 @@ func UpdateUser(user form.User) (form.User, error) {
 	return user, err
 }
 
+func GetUserById(id uint) (user form.User, err error) {
+	var db *gorm.DB
+	db, err = database.Connect()
+	if err == nil {
+		err = db.Table("users").First(&user, id).Error
+	}
+	return user, err
+}
+
 func GetUserByUsername(username string) (user form.User, err error) {
 	var db *gorm.DB
 	db, err = database.Connect()

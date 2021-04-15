@@ -1,17 +1,22 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
+
 	"github.com/labstack/echo/v4"
 
-	"echo-demo/models"
 	form "echo-demo/forms"
 	method "echo-demo/methods"
+	"echo-demo/models"
 )
 
 func GetBuildingsList(c echo.Context) error {
-	building, err := models.GetBuildingsList()
-	// building, err := models.GetBuildingsList2()
+	a := c.Get("user").(form.User) // Ép kiểu từ interface{} sang 1 interface khác
+	fmt.Println(a.Username)
+
+	// building, err := models.GetBuildingsList()
+	building, err := models.GetBuildingsList2()
 	if(err != nil) {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
