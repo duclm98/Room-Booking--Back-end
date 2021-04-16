@@ -13,5 +13,4 @@ func BuildingsRoute(e *echo.Group) {
 	router.GET("/:ID", controller.GetBuilding)
 	router.GET("/:BuildingID/rooms", controller.GetRoomsByBuildingId)
 	router.GET("/:BuildingID/available-rooms-list", controller.GetAvailableRoomsList)
-	// router.GET("/:BuildingID/available-rooms-calendar", controller.GetAvailableRoomsCalendar)
 }

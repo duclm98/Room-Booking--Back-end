@@ -78,34 +78,3 @@ func GetAvailableRoomsList(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, result)
 }
-
-// func GetAvailableRoomsCalendar(c echo.Context) error {
-// 	b := new(form.Booking)
-// 	if err := c.Bind(b); err != nil {
-// 		return c.JSON(http.StatusBadRequest, err)
-// 	}
-
-// 	bookingArr, err := models.GetBookingByBuildingIdDateTime(b.BuildingID, b.Date, b.Time)
-// 	if(err != nil) {
-// 		return c.JSON(http.StatusBadRequest, err)
-// 	}
-
-// 	roomsArr, err := models.GetRoomsByBuildingId(b.BuildingID)
-// 	if(err != nil) {
-// 		return c.JSON(http.StatusBadRequest, err)
-// 	}
-
-// 	timeArr := method.TimeArray()
-
-// 	result := Result {
-// 		TimeArray: timeArr
-// 	}
-
-// 	for i := range roomsArr {
-// 		if a := method.Contains(bookingArr, roomsArr[i].ID); a == false {
-			
-// 		}
-// 	}
-
-// 	return c.JSON(http.StatusOK, result)
-// }
