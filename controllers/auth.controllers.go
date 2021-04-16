@@ -106,8 +106,11 @@ func Login(c echo.Context) error {
 		}
 	}
 
-	return c.JSON(http.StatusOK, map[string]string{
-		"accessToken": aT,
-		"refreshToken":user.RefreshToken,
-	})
+	authInfo := form.Auth{
+		AccessToken: aT,
+		RefreshToken: user.RefreshToken,
+		User: user,
+	}
+
+	return c.JSON(http.StatusOK, authInfo)
 }
