@@ -52,10 +52,11 @@ func Authentication(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
-func Route(e *echo.Group) {
+func Router(e *echo.Group) {
 	authRouter := e.Group("/auth")
 	authRouter.POST("/register", controller.Register)
 	authRouter.POST("/login", controller.Login)
+	authRouter.POST("/refresh-token", controller.Refresh)
 
 	buildingRouter := e.Group("/buildings", Authentication)
 	buildingRouter.GET("", controller.GetBuildingsList)

@@ -24,57 +24,60 @@ func CheckPassword(hashedPassword string, password string) (isPasswordValid bool
 }
 
 func CreateToken(id uint, secretKey string, exprise uint) (string, error) {
-  var err error
+	var err error
 	token := jwt.New(jwt.SigningMethodHS256)
-  claims := token.Claims.(jwt.MapClaims)
-  claims["id"] = id
-  claims["exp"] = time.Now().Add(time.Minute * time.Duration(exprise)).Unix()
-  t, err := token.SignedString([]byte(secretKey))
-  return t, err
+	claims := token.Claims.(jwt.MapClaims)
+	claims["id"] = id
+	claims["exp"] = time.Now().Add(time.Minute * time.Duration(exprise)).Unix()
+	t, err := token.SignedString([]byte(secretKey))
+	return t, err
 }
 
 func ExtractToken(r *http.Request) string {
-  bearToken := r.Header.Get("Authorization") //Authorization: bearer token...
-  strArr := strings.Split(bearToken, " ")
-  if len(strArr) == 2 {
-     return strArr[1]
-  }
-  return ""
+	bearToken := r.Header.Get("Authorization") //Authorization: bearer token...
+	strArr := strings.Split(bearToken, " ")
+	if len(strArr) == 2 {
+		return strArr[1]
+	}
+	return ""
 }
 
 func VerifyToken(tokenString string, secretKey string) (uint, error) {
-  token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-     //Make sure that the token method conform to "SigningMethodHMAC"
-     if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-        return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
-     }
-     return []byte(secretKey), nil
-  })
-  if err != nil {
-    return 0, err
-  }
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		//Make sure that the token method conform to "SigningMethodHMAC"
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+		}
+		return []byte(secretKey), nil
+	})
+	if err != nil {
+		return 0, err
+	}
 	claims, ok := token.Claims.(jwt.MapClaims)
-  if ok && token.Valid {
+	if ok && token.Valid {
 		idUint64, _ := strconv.ParseUint(fmt.Sprintf("%.f", claims["id"]), 10, 64)
 		id := uint(idUint64)
 		return id, nil
-  }
-  return 0, nil
+	}
+	return 0, nil
 }
 
 func DecodeToken(tokenString string, secretKey string) (uint, error) {
-  token, _ := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-     //Make sure that the token method conform to "SigningMethodHMAC"
-     if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-        return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
-     }
-     return []byte(secretKey), nil
-  })
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		//Make sure that the token method conform to "SigningMethodHMAC"
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+		}
+		return []byte(secretKey), nil
+	})
+  if err.Error() != "Token is expired" {
+		return 0, err
+	}
 	claims, ok := token.Claims.(jwt.MapClaims)
-  if ok && token.Valid {
+	if ok {
 		idUint64, _ := strconv.ParseUint(fmt.Sprintf("%.f", claims["id"]), 10, 64)
 		id := uint(idUint64)
 		return id, nil
-  }
-  return 0, nil
+	}
+	return 0, nil
 }

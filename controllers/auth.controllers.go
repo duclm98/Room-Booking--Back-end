@@ -41,7 +41,7 @@ func Register(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err)
 	}
 
-	newUser := form.User {
+	newUser := form.User{
 		Username: u.Username,
 		Password: hashPassword,
 	}
@@ -82,7 +82,7 @@ func Login(c echo.Context) error {
 	createNewRefreshToken := false
 
 	if user.RefreshToken == "" {
-		createNewRefreshToken = true;
+		createNewRefreshToken = true
 	} else {
 		_, err := method.VerifyToken(user.RefreshToken, env.AuthRefreshTokenSecret)
 		if err != nil { // Co err tuc la refresh token da het han hoac xay ra loi => tao refresh token moi
@@ -107,9 +107,64 @@ func Login(c echo.Context) error {
 	}
 
 	authInfo := form.Auth{
-		AccessToken: aT,
+		AccessToken:  aT,
 		RefreshToken: user.RefreshToken,
-		User: user,
+		User:         user,
+	}
+
+	return c.JSON(http.StatusOK, authInfo)
+}
+
+func Refresh(c echo.Context) error {
+	accessToken := method.ExtractToken(c.Request())
+	if accessToken == "" {
+		return c.JSON(http.StatusBadRequest, map[string]string{
+			"message": "Không tìm thấy access token!",
+		})
+	}
+
+	idAT, err := method.DecodeToken(accessToken, env.AuthAccessTokenSecret)
+	if err != nil || idAT < 1 {
+		return c.JSON(http.StatusBadRequest, map[string]string{
+			"message": "Access token không hợp lệ!",
+		})
+	}
+
+	user, err := model.GetUserById(idAT)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{
+			"message": "User không tồn tại!",
+		})
+	}
+
+	a := new(form.Auth)
+	if err := c.Bind(a); err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+
+	idRT, err := method.VerifyToken(a.RefreshToken, env.AuthRefreshTokenSecret)
+	if a.RefreshToken != user.RefreshToken || err != nil || idRT < 1 {
+		return c.JSON(http.StatusUnauthorized, map[string]string{
+			"message": "Refresh token không hợp lệ hoặc đã hết hạn, vui lòng đăng nhập lại!",
+		})
+	}
+
+	if idAT != idRT {
+		return c.JSON(http.StatusUnauthorized, map[string]string{
+			"message": "Thông tin chứa trong ascess token và refresh token không khớp!",
+		})
+	}
+
+	// Create access token
+	aT, err := method.CreateToken(idAT, env.AuthAccessTokenSecret, env.AuthAccessTokenExp)
+	if err != nil {
+		return c.JSON(http.StatusUnauthorized, err)
+	}
+
+	authInfo := form.Auth{
+		AccessToken:  aT,
+		RefreshToken: user.RefreshToken,
+		User:         user,
 	}
 
 	return c.JSON(http.StatusOK, authInfo)

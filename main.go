@@ -20,7 +20,7 @@ func main() {
 	}))
 
 	api := e.Group("/api")
-	Route(api)
+	Router(api)
 	
 	s := &http2.Server{
 		MaxConcurrentStreams: 250,
