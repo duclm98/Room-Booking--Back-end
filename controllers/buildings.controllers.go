@@ -1,19 +1,18 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
 
-	form "echo-demo/forms"
+	dto "echo-demo/DTOs"
 	method "echo-demo/methods"
 	"echo-demo/models"
 )
 
 func GetBuildingsList(c echo.Context) error {
-	a := c.Get("user").(form.User) // Ép kiểu từ interface{} sang 1 interface khác
-	fmt.Println(a.Username)
+	// a := c.Get("user").(form.User) // Ép kiểu từ interface{} sang 1 interface khác
+	// fmt.Println(a.Username)
 
 	// building, err := models.GetBuildingsList()
 	building, err := models.GetBuildingsList2()
@@ -25,7 +24,7 @@ func GetBuildingsList(c echo.Context) error {
 }
 
 func GetBuilding(c echo.Context) error {
-	b := new(form.Building)
+	b := new(dto.Building)
 	if err := c.Bind(b); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
@@ -39,7 +38,7 @@ func GetBuilding(c echo.Context) error {
 }
 
 func GetRoomsByBuildingId(c echo.Context) error {
-	r := new(form.Room)
+	r := new(dto.Room)
 	if err := c.Bind(r); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
@@ -53,7 +52,7 @@ func GetRoomsByBuildingId(c echo.Context) error {
 }
 
 func GetAvailableRoomsList(c echo.Context) error {
-	b := new(form.Booking)
+	b := new(dto.Booking)
 	if err := c.Bind(b); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
@@ -68,7 +67,7 @@ func GetAvailableRoomsList(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err)
 	}
 
-	var result []form.Room
+	var result []dto.Room
 
 	for i := range roomsArr {
 		if a := method.Contains(bookingArr, roomsArr[i].ID); a == false {

@@ -58,12 +58,13 @@ func Router(e *echo.Group) {
 	authRouter.POST("/login", controller.Login)
 	authRouter.POST("/refresh-token", controller.Refresh)
 
-	buildingRouter := e.Group("/buildings", Authentication)
+	// buildingRouter := e.Group("/buildings", Authentication)
+	buildingRouter := e.Group("/buildings")
 	buildingRouter.GET("", controller.GetBuildingsList)
 	buildingRouter.GET("/:ID", controller.GetBuilding)
 	buildingRouter.GET("/:BuildingID/rooms", controller.GetRoomsByBuildingId)
 	buildingRouter.GET("/:BuildingID/available-rooms-list", controller.GetAvailableRoomsList)
 
-	bookingRouter := e.Group("/booking", Authentication)
+	bookingRouter := e.Group("/booking")
 	bookingRouter.GET("", controller.GetBookingByBuildingIdDateTime)
 }

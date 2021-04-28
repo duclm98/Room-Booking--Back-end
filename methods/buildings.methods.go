@@ -1,10 +1,10 @@
 package methods
 
 import (
-	form "echo-demo/forms"
+	dto "echo-demo/DTOs"
 )
 
-func Contains(arr []form.Booking, id uint) bool {
+func Contains(arr []dto.Booking, id uint) bool {
 	for i := range arr {
 		if arr[i].RoomID == id {
 			return true

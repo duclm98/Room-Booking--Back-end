@@ -5,12 +5,12 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	form "echo-demo/forms"
+	dto "echo-demo/DTOs"
 	"echo-demo/models"
 )
 
 func GetBookingByBuildingIdDateTime(c echo.Context) error {
-	b := new(form.Booking)
+	b := new(dto.Booking)
 	if err := c.Bind(b); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}

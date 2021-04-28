@@ -1,47 +1,26 @@
 package models
 
 import (
-
-	"gorm.io/gorm"
-
-	database "echo-demo/db"
-	form "echo-demo/forms"
+	"echo-demo/db"
+	dto "echo-demo/DTOs"
 )
 
-func CreateUser(user form.User) (form.User, error) {
-	var db *gorm.DB
-	var err error
-	db, err = database.Connect()
-	if err == nil {
-		err = db.Create(&user).Error
-	}
+func CreateUser(user dto.User) (dto.User, error) {
+	err := db.DB.Create(&user).Error
 	return user, err
 }
 
-func UpdateUser(user form.User) (form.User, error) {
-	var db *gorm.DB
-	var err error
-	db, err = database.Connect()
-	if err == nil {
-		err = db.Save(&user).Error
-	}
+func UpdateUser(user dto.User) (dto.User, error) {
+	err := db.DB.Save(&user).Error
 	return user, err
 }
 
-func GetUserById(id uint) (user form.User, err error) {
-	var db *gorm.DB
-	db, err = database.Connect()
-	if err == nil {
-		err = db.Table("users").First(&user, id).Error
-	}
+func GetUserById(id uint) (user dto.User, err error) {
+	err = db.DB.Table("users").First(&user, id).Error
 	return user, err
 }
 
-func GetUserByUsername(username string) (user form.User, err error) {
-	var db *gorm.DB
-	db, err = database.Connect()
-	if err == nil {
-		err = db.Table("users").Where("username = ?", username).First(&user).Error
-	}
+func GetUserByUsername(username string) (user dto.User, err error) {
+	err = db.DB.Table("users").Where("username = ?", username).First(&user).Error
 	return user, err
 }

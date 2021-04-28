@@ -21,11 +21,11 @@ func main() {
 
 	api := e.Group("/api")
 	Router(api)
-	
+
 	s := &http2.Server{
 		MaxConcurrentStreams: 250,
-		MaxReadFrameSize: 1048576,
-		IdleTimeout: 10 * time.Second,
+		MaxReadFrameSize:     1048576,
+		IdleTimeout:          10 * time.Second,
 	}
 
 	e.Logger.Fatal(e.StartH2CServer(":3000", s))

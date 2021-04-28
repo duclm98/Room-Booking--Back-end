@@ -6,6 +6,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 
+	dto "echo-demo/DTOs"
 	"echo-demo/config"
 	form "echo-demo/forms"
 	method "echo-demo/methods"
@@ -24,7 +25,7 @@ func init() {
 }
 
 func Register(c echo.Context) error {
-	u := new(form.User)
+	u := new(dto.User)
 	if err := c.Bind(u); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
@@ -41,7 +42,7 @@ func Register(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err)
 	}
 
-	newUser := form.User{
+	newUser := dto.User{
 		Username: u.Username,
 		Password: hashPassword,
 	}
@@ -54,7 +55,7 @@ func Register(c echo.Context) error {
 }
 
 func Login(c echo.Context) error {
-	u := new(form.User)
+	u := new(dto.User)
 	if err := c.Bind(u); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}

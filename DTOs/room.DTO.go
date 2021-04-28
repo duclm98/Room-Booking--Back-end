@@ -1,4 +1,4 @@
-package forms
+package DTOs
 
 import (
 	"time"
